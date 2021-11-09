@@ -67,6 +67,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ls -l
-          ./dotnet-sonarscanner begin /k:"JohnMurwin_NQueensSimulation" /o:"johnmurwin" /d:sonar.verbose=false /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url=https://sonarcloud.io /d:sonar.exclusions=Assets/Plugins/** /d:sonar.exclusions=Assets/NQueensSimulation/Tests/** /d:sonar.exclusions=Assets/_Demo/**
+          ./dotnet-sonarscanner begin /k:"JohnMurwin_NQueensSimulation" /o:"johnmurwin" /d:sonar.verbose=false /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url=https://sonarcloud.io /d:sonar.exclusions=Assets/Plugins/**, Assets/NQueensSimulation/Tests/**, Assets/_Demo/**
           $DOTNET_ROOT/dotnet build NQueensSimulation/NQueensSimulation.sln
           ./dotnet-sonarscanner end /d:sonar.login=$SONAR_TOKEN
