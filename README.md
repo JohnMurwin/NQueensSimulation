@@ -24,11 +24,14 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![License][license-shield]][license-url]
 
+[![Actions Status][actions-shield]][actions-url]
+
 [![Quality Gate Status][quality-gate-shield]][quality-gate-url]
 [![Vulnerabilities][vulnerabilities-shield]][vulnerabilities-url]
 [![Bugs][bugs-shield]][bugs-url]
 [![Code Smells][smells-shield]][smells-url]
 [![Coverage][coverage-shield]][coverage-url]
+
 
 
 <!-- PROJECT LOGO -->
@@ -200,6 +203,9 @@ Project Link: [https://github.com/JohnMurwin/NQueensSimulation](https://github.c
 
 [issues-shield]: https://img.shields.io/github/issues/JohnMurwin/repo.svg?style=for-the-badge
 [issues-url]: https://github.com/JohnMurwin/NQueensSimulation/issues
+
+[actions-shield]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FJohnMurwin%2FNQueensSimulation%2Fbadge%3Fref%3Dmain&style=plastic
+[actions-url]: https://actions-badge.atrox.dev/JohnMurwin/NQueensSimulation/goto?ref=main
 
 [license-shield]: https://img.shields.io/github/license/JohnMurwin/NQueensSimulation.svg?style=for-the-badge
 [license-url]: https://github.com/JohnMurwin/NQueensSimulation/blob/main/LICENSE.md
