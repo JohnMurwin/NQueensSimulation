@@ -52,6 +52,8 @@ jobs:
           artifactsPath: ${{ matrix.testMode }}-artifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: ${{ matrix.testMode }} Test Results
+          customParameters: '-nographics' # <--- This is the important bit
+          unityVersion: 2020.1.17f1
 
       # Upload Test Results as Artifacts for each testMode matrix
       - name: Upload Results as Artifacts
