@@ -1,0 +1,110 @@
+#   Continuous Integration Pipeline
+#   Uses: SonarCloud, GameCI, UnityTestRunner,
+#   From: Mirage, SonarCloud, and Fathom7
+
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  CI:
+    name: CI Pipeline
+    runs-on: ubuntu-latest
+    # available list of containers here:
+    # https://hub.docker.com/r/unityci/editor/tags?page=1&ordering=last_updated&name=ubuntu-2020.1.17f1-base
+    container: unityci/editor:ubuntu-2020.1.17f1-base-0.10.0
+    env:
+      DOTNET_ROOT: '/opt/unity/Editor/Data/NetCore/Sdk-2.2.107'
+
+    steps:
+
+      # First we need to grab the UnityLicense we uploaded as a Secret from the Workflow: UnityActivation
+      - name: Activate Unity
+        # exit code is 1 for manual activation
+        continue-on-error: true
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |          
+          echo "$UNITY_LICENSE" | tr -d '\r' > UnityLicenseFile.ulf
+          unity-editor -nographics -logFile /dev/stdout -manualLicenseFile UnityLicenseFile.ulf -quit
+
+      # Next checkout the project @ fetch-depth 0 for full history and LFS support
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 0
+          lfs: true
+      
+      # Cache library for future speed for Analysis
+      - name: Cache Library
+        id: cache-library
+        uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-2020.1.17
+
+      # Install dotnet version of the SonarScanner tool via SonarCloud
+      - name: Install Sonar Scanner
+        run: |
+          $DOTNET_ROOT/dotnet tool install dotnet-sonarscanner --tool-path . --version 5.2.0
+          apt update
+          apt install -y openjdk-11-jre-headless=11.0.11+9-0ubuntu2~18.04
+
+      # Using Unity Test Runner, Run 'editor-mode' Tests via CLI
+      - name: Run editor-mode Tests
+        run: unity-editor -nographics -logFile /dev/stdout -runTests -testPlatform editmode -testResults Tests/editmode-results.xml -enableCodeCoverage -coverageResultsPath Tests -debugCodeOptimization 
+        timeout-minutes: 20
+        
+      # Using Unity Test Runner, Run 'play-mode' Tests via CLI
+      - name: Run play-mode Tests
+        run: unity-editor -nographics -logFile /dev/stdout -runTests -testPlatform playmode -testResults Tests/playmode-results.xml -enableCodeCoverage -coverageResultsPath Tests -debugCodeOptimization 
+        timeout-minutes: 20
+
+      # Upload Test Results as Artifacts
+      - name: Archive Test Results
+        uses: actions/upload-artifact@v2.2.4
+        if: always()
+        with:
+          name: Test Results
+          path: Tests/
+
+      # Creates an annotation of the build information and also lists first n failed NUnit tests
+      - name: Publish Test Results
+        uses: MirageNet/nunit-reporter@v1.0.11
+        if: always()
+        with:
+          path: "Tests/*.xml"
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Builds dontnet solution of project for SonarCloud analysis
+      - name: Generate Solution
+        run: unity-editor -nographics -logFile /dev/stdout -customBuildName NQueensSimulation -projectPath NQueensSimulation -executeMethod  UnityEditor.SyncVS.SyncSolution -quit
+
+      # Run SonarCloud Analysis (linting, test coverage, and code duplication = QualityGate) using basic dotnet rule-set
+      - name: SonarCloud Analysis
+        env:
+          FrameworkPathOverride: /opt/unity/Editor/Data/MonoBleedingEdge/
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ls -l
+          ./dotnet-sonarscanner begin \
+            /k:"JohnMurwin_NQueensSimulation" \
+            /o:"johnmurwin" \
+            /d:sonar.verbose=false \
+            /d:sonar.login=$SONAR_TOKEN \
+            /d:sonar.host.url=https://sonarcloud.io \
+            /d:sonar.exclusions=Assets/Plugins/**,Assets/_Demo/** \
+            /d:sonar.cpd.exclusions=Assets/NQueensSimulation/Tests/** \
+            /d:sonar.coverage.exclusions=Assets/NQueensSimulation/Tests/** \
+            /d:sonar.cs.nunit.reportsPaths=Tests/editmode-results.xml,Tests/playmode-results.xml \
+            /d:sonar.cs.opencover.reportsPaths=Tests/EditMode/TestCoverageResults_0000.xml,Tests/PlayMode/TestCoverageResults_0000.xml
+          $DOTNET_ROOT/dotnet build NQueensSimulation/NQueensSimulation.sln
+          ./dotnet-sonarscanner end /d:sonar.login=$SONAR_TOKEN

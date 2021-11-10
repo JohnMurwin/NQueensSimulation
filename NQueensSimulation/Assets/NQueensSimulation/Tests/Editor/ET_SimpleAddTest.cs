@@ -2,7 +2,7 @@
 
 namespace NQueensSimulation.Tests
 {
-    public class SampleEditModeTest
+    public class ET_SimpleAddTest
     {
         [Test]
         public void TestIncrement()
