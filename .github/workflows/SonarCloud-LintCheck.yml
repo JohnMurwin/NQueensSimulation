@@ -24,7 +24,7 @@ jobs:
     
     steps:
       # First we need to grab the UnityLicense we uploaded as a Secret from the Workflow: UnityActivation
-      - name: Activate unity
+      - name: Activate Unity
         # exit code is 1 for manual activation
         continue-on-error: true
         env:
@@ -34,7 +34,7 @@ jobs:
           unity-editor -nographics -logFile /dev/stdout -manualLicenseFile UnityLicenseFile.ulf -quit 
       
       # Next checkout the project @ fetch-depth 0 for full history and LFS support
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v1
         with:
           fetch-depth: 0
