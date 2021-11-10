@@ -21,11 +21,9 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
-[![Contributors][contributors-shield]][contributors-url]
 [![License][license-shield]][license-url]
 
-[![Actions Status][actions-shield]][actions-url]
-
+[![CI Status][ci-shield]][ci-url]
 [![Quality Gate Status][quality-gate-shield]][quality-gate-url]
 [![Vulnerabilities][vulnerabilities-shield]][vulnerabilities-url]
 [![Bugs][bugs-shield]][bugs-url]
@@ -198,16 +196,16 @@ Project Link: [https://github.com/JohnMurwin/NQueensSimulation](https://github.c
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/JohnMurwin/NQueensSimulation?style=for-the-badge
-[contributors-url]: https://github.com/JohnMurwin/NQueensSimulation/graphs/contributors 
+[contributors-shield]: https://img.shields.io/github/contributors/JohnMurwin/NQueensSimulation?style=plastic
+[contributors-url]: https://github.com/JohnMurwin/NQueensSimulation/graphs/contributors
 
-[issues-shield]: https://img.shields.io/github/issues/JohnMurwin/repo.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/JohnMurwin/repo.svg?=plastic
 [issues-url]: https://github.com/JohnMurwin/NQueensSimulation/issues
 
-[actions-shield]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FJohnMurwin%2FNQueensSimulation%2Fbadge%3Fref%3Dmain&style=plastic
-[actions-url]: https://actions-badge.atrox.dev/JohnMurwin/NQueensSimulation/goto?ref=main
+[ci-shield]: https://github.com/MirageNet/Mirage/workflows/CI/badge.svg
+[ci-url]: https://github.com/JohnMurwin/NQueensSimulation/actions/workflows/SonarCloud-LintCheck.yml
 
-[license-shield]: https://img.shields.io/github/license/JohnMurwin/NQueensSimulation.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/JohnMurwin/NQueensSimulation.svg?=plastic
 [license-url]: https://github.com/JohnMurwin/NQueensSimulation/blob/main/LICENSE.md
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
