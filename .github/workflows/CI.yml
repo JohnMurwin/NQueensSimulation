@@ -72,8 +72,8 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: Test results
-          path: Tests
+          name: Test Results
+          path: Tests/
 
       # Creates an annotation of the build information and also lists first n failed NUnit tests
       - name: Publish Test Results
