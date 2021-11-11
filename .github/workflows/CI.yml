@@ -137,8 +137,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -name: test-output
-        run: echo "this is where we build our project"
+    - name: Build- test status message
+      run: |
+        echo here is where we build the project
   
   DeployProject:
     needs: BuildProject
@@ -146,5 +147,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -name: test-output
-        run: echo "this is where we would upload our project"
+      - name: Deploy- test status message
+        run: |
+        echo here is where we build the project
