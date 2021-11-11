@@ -6,11 +6,11 @@ using UnityEngine.TestTools;
 
 namespace Tests
 {
-    public class PT_Default
+    public class PT_DemoTest
     {
         // A Test behaves as an ordinary method
         [Test]
-        public void PT_DefaultSimplePasses()
+        public void PT_DemoTestSimplePasses()
         {
             // Use the Assert class to test conditions
         }
@@ -18,7 +18,7 @@ namespace Tests
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
         // `yield return null;` to skip a frame.
         [UnityTest]
-        public IEnumerator PT_DefaultWithEnumeratorPasses()
+        public IEnumerator PT_DemoTestWithEnumeratorPasses()
         {
             // Use the Assert class to test conditions.
             // Use yield to skip a frame.
