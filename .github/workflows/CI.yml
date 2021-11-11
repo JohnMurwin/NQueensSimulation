@@ -1,0 +1,150 @@
+#   Continuous Integration Pipeline
+#   Uses: SonarCloud, GameCI, UnityTestRunner,
+#   From: Mirage, SonarCloud, and Fathom7
+
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  LintProject:
+    name: Lint Source Code
+    runs-on: ubuntu-latest
+    # available list of containers here:
+    # https://hub.docker.com/r/unityci/editor/tags?page=1&ordering=last_updated&name=ubuntu-2020.1.17f1-base
+    container: unityci/editor:ubuntu-2020.1.17f1-base-0.10.0
+    env:
+      DOTNET_ROOT: '/opt/unity/Editor/Data/NetCore/Sdk-2.2.107'
+
+    steps:
+
+      # First we need to grab the UnityLicense we uploaded as a Secret from the Workflow: UnityActivation
+      - name: Activate Unity
+        # exit code is 1 for manual activation
+        continue-on-error: true
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |          
+          echo "$UNITY_LICENSE" | tr -d '\r' > UnityLicenseFile.ulf
+          unity-editor -nographics -logFile /dev/stdout -manualLicenseFile UnityLicenseFile.ulf -quit
+
+      # Next checkout the project @ fetch-depth 0 for full history and LFS support
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 0
+          lfs: true
+      
+      # Cache library for future speed for Analysis
+      - name: Cache Library
+        id: cache-library
+        uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-2020.1.17
+
+      # Install dotnet version of the SonarScanner tool via SonarCloud
+      - name: Install Sonar Scanner
+        run: |
+          $DOTNET_ROOT/dotnet tool install dotnet-sonarscanner --tool-path . --version 5.2.0
+          apt update
+          apt install -y openjdk-11-jre-headless=11.0.11+9-0ubuntu2~18.04
+
+      # Builds dontnet solution of project for SonarCloud analysis
+      - name: Generate Solution
+        run: unity-editor -nographics -logFile /dev/stdout -customBuildName NQueensSimulation -projectPath NQueensSimulation -executeMethod  UnityEditor.SyncVS.SyncSolution -quit
+
+      # Run SonarCloud Analysis (linting, test coverage, and code duplication = QualityGate) using basic dotnet rule-set
+      - name: SonarCloud Analysis
+        env:
+          FrameworkPathOverride: /opt/unity/Editor/Data/MonoBleedingEdge/
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ls -l
+          ./dotnet-sonarscanner begin \
+            /k:"JohnMurwin_NQueensSimulation" \
+            /o:"johnmurwin" \
+            /d:sonar.verbose=false \
+            /d:sonar.login=$SONAR_TOKEN \
+            /d:sonar.host.url=https://sonarcloud.io \
+            /d:sonar.exclusions=Assets/Plugins/**,Assets/_Demo/**,Assets/NQueensSimulation/Tests/** \
+          $DOTNET_ROOT/dotnet build NQueensSimulation/NQueensSimulation.sln
+          ./dotnet-sonarscanner end /d:sonar.login=$SONAR_TOKEN
+
+  TestProject:
+    needs: LintProject
+    name: Run Tests in ${{ matrix.testMode }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - NQueensSimulation
+        testMode:
+          - playmode
+          - editmode
+
+    steps:
+      # First we checkout the project with LFS support (don't need fetch depth here)
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      # Cache library for future speed for Analysis
+      - name: Cache Library
+        uses: actions/cache@v2
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}
+          restore-keys: |
+            Library-
+
+      # Using GameCI's Unity Test Runner, Run Tests via CLI
+      - name: Unity Test Runner via CLI
+        uses: game-ci/unity-test-runner@v2
+        id: tests
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: ${{ matrix.testMode }}-artifacts
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: ${{ matrix.testMode }} Test Results
+          customParameters: '-nographics' # <--- This is the important bit
+          unityVersion: 2020.1.17f1
+
+      # Upload Test Results as Artifacts for each testMode matrix
+      - name: Upload Results as Artifacts
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Test results for ${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
+
+  BuildProject:
+    needs: TestProject
+    name: Build for 'matrix.platform'
+    runs-on: ubuntu-latest
+
+    steps:
+      -name: test-output
+        run: echo "this is where we build our project"
+  
+  DeployProject:
+    needs: BuildProject
+    name: Deploy to Itch.io for 'matrix.platform'
+    runs-on: ubuntu-latest
+
+    steps:
+      -name: test-output
+        run: echo "this is where we would upload our project"
