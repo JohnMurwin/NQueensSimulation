@@ -69,15 +69,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ls -l
-          ./dotnet-sonarscanner begin \
-            /k:"JohnMurwin_NQueensSimulation" \
-            /o:"johnmurwin" \
-            /d:sonar.verbose=false \
-            /d:sonar.login=$SONAR_TOKEN \
-            /d:sonar.host.url=https://sonarcloud.io \
-            /d:sonar.exclusions=Assets/Plugins/**,Assets/_Demo/**,Assets/NQueensSimulation/Tests/** \
+          ./dotnet-sonarscanner begin /k:"JohnMurwin_NQueensSimulation" /o:"johnmurwin" /d:sonar.verbose=false /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url=https://sonarcloud.io /d:sonar.exclusions=Assets/Plugins/**,Assets/NQueensSimulation/Tests/**,Assets/_Demo/**
           $DOTNET_ROOT/dotnet build NQueensSimulation/NQueensSimulation.sln
           ./dotnet-sonarscanner end /d:sonar.login=$SONAR_TOKEN
+
 
   TestProject:
     needs: LintProject
@@ -137,14 +132,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -name: test-output
-        run: echo "this is where we build our project"
-  
-  DeployProject:
-    needs: BuildProject
-    name: Deploy to Itch.io for 'matrix.platform'
-    runs-on: ubuntu-latest
-
-    steps:
-      -name: test-output
-        run: echo "this is where we would upload our project"
+    - name: Build- test status message
+      run: |
+        echo here is where we build the project
