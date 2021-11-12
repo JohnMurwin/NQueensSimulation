@@ -60,9 +60,9 @@ jobs:
           path: ${{ steps.tests.outputs.artifactsPath }}
 
       - name: Navigate to Unity Directory
-        run: \
+        run: |
           cd NQueensSimulation
-          
+
       - name: List Output
         run: |
           ls -l
