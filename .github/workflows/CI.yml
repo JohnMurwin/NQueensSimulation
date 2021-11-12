@@ -69,7 +69,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ls -l
-          ./dotnet-sonarscanner begin /k:"JohnMurwin_NQueensSimulation" /o:"johnmurwin" /d:sonar.verbose=false /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url=https://sonarcloud.io /d:sonar.exclusions=Assets/Plugins/**,Assets/NQueensSimulation/Tests/**,Assets/_Demo/**
+          ./dotnet-sonarscanner begin \
+            /k:"JohnMurwin_NQueensSimulation" \
+            /o:"johnmurwin" \
+            /d:sonar.verbose=false \
+            /d:sonar.login=$SONAR_TOKEN \
+            /d:sonar.host.url=https://sonarcloud.io \
+            /d:sonar.exclusions=Assets/Plugins/**,Assets/_Demo/**
           $DOTNET_ROOT/dotnet build NQueensSimulation/NQueensSimulation.sln
           ./dotnet-sonarscanner end /d:sonar.login=$SONAR_TOKEN
 
@@ -115,8 +121,17 @@ jobs:
           artifactsPath: ${{ matrix.testMode }}-artifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: ${{ matrix.testMode }} Test Results
-          customParameters: '-nographics' # <--- This is the important bit
+          customParameters: -nographics -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions generateAdditionalMetrics
           unityVersion: 2020.1.17f1
+          
+      # Upload Code Coverage XML Reports to CodeCov
+      - name: Upload XML report to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          name: Unity Test Runner Results
+          flags: automated
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: CodeCoverage/**/*.xml
 
       # Upload Test Results as Artifacts for each testMode matrix
       - name: Upload Results as Artifacts
@@ -125,6 +140,8 @@ jobs:
         with:
           name: Test results for ${{ matrix.testMode }}
           path: ${{ steps.tests.outputs.artifactsPath }}
+
+      
 
   BuildProject:
     needs: TestProject
@@ -135,3 +152,17 @@ jobs:
     - name: Build- test status message
       run: |
         echo here is where we build the project
+
+  UploadProject:
+    needs: BuildProject
+    name: Upload for 'matrix.platform'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Tag Build Version
+      run: |
+        echo here is where we tag and release a version for the build
+
+    - name: Upload- test status message
+      run: |
+        echo here is where we upload the dev-build of the project
