@@ -4,15 +4,8 @@
 
 name: Test Code Coverage
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
   pull_request:
     types: [opened, synchronize, reopened, edited]
-  workflow_dispatch: {}
 
 jobs:
 TestProject:
@@ -66,7 +59,6 @@ TestProject:
           name: Test results for ${{ matrix.testMode }}
           path: ${{ steps.tests.outputs.artifactsPath }}
 
-      # Run SonarCloud Analysis (linting, test coverage, and code duplication = QualityGate) using basic dotnet rule-set
       - name: List Output
         run: |
           ls -l
