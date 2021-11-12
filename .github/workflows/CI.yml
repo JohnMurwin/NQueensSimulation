@@ -57,15 +57,23 @@ jobs:
           apt update
           apt install -y openjdk-11-jre-headless=11.0.11+9-0ubuntu2~18.04
 
-      # Runs Unity Test Runner editor-mode tests (with support for codeCoverage, and debug for CodeOptimization) 
-      - name: Run editor Tests
-        run: unity-editor -nographics -logFile /dev/stdout -runTests -testPlatform editmode -testResults Tests/editmode-results.xml -enableCodeCoverage -coverageResultsPath Tests -debugCodeOptimization 
-        timeout-minutes: 20
-        
-      # Runs Unity Test Runner play-mode tests (with support for codeCoverage, and debug for CodeOptimization) 
-      - name: Run play Tests
-        run: unity-editor -nographics -logFile /dev/stdout -runTests -testPlatform playmode -testResults Tests/playmode-results.xml -enableCodeCoverage -coverageResultsPath Tests -debugCodeOptimization 
-        timeout-minutes: 20
+      # Install dotnet version of the SonarScanner tool via SonarCloud
+      - name: Run tests and generate Coverage XML Report
+        uses: game-ci/unity-test-runner@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          unityVersion: 2020.1.17f1
+          testMode: All
+          customParameters: -nographics -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions generateAdditionalMetrics
+
+      - name: Upload XML report to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          name: Unity Test Runner Results
+          flags: automated
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: CodeCoverage/**/*.xml
 
       # Builds dontnet solution of project for SonarCloud analysis
       - name: Generate Solution
@@ -86,10 +94,6 @@ jobs:
             /d:sonar.login=$SONAR_TOKEN \
             /d:sonar.host.url=https://sonarcloud.io \
             /d:sonar.exclusions=Assets/Plugins/**,Assets/_Demo/** \
-            /d:sonar.cpd.exclusions=Assets/NQueensSimulation/Tests/** \
-            /d:sonar.coverage.exclusions=Assets/NQueensSimulation/Tests/** \
-            /d:sonar.cs.nunit.reportsPaths=Tests/editmode-results.xml,Tests/playmode-results.xml \
-            /d:sonar.cs.opencover.reportsPaths=CodeCoverage/NQueensSimulation-opencov/EditMode/TestCoverageResults_0000.xml,CodeCoverage/NQueensSimulation-opencov/EditMode/TestCoverageResults_0000.xml
           $DOTNET_ROOT/dotnet build NQueensSimulation/NQueensSimulation.sln
           ./dotnet-sonarscanner end /d:sonar.login=$SONAR_TOKEN
 
