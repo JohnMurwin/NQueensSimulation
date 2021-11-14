@@ -219,5 +219,5 @@ Project Link: [https://github.com/JohnMurwin/NQueensSimulation](https://github.c
 [bugs-url]: https://sonarcloud.io/dashboard?id=JohnMurwin_NQueensSimulation
 [smells-shield]: https://sonarcloud.io/api/project_badges/measure?project=JohnMurwin_NQueensSimulation&metric=code_smells
 [smells-url]: https://sonarcloud.io/dashboard?id=JohnMurwin_NQueensSimulation
-[coverage-shield]: https://sonarcloud.io/api/project_badges/measure?project=JohnMurwin_NQueensSimulation&metric=coverage
-[coverage-url]: https://sonarcloud.io/dashboard?id=JohnMurwin_NQueensSimulation
+[coverage-shield]: https://codecov.io/gh/JohnMurwin/NQueensSimulation/branch/main/graph/badge.svg?token=EMFF63SUPA
+[coverage-url]: https://codecov.io/gh/JohnMurwin/NQueensSimulation
