@@ -34,12 +34,13 @@ jobs:
         - name: Cache Project Library for next Build
           uses: actions/cache@v2
           with:
-            path: NQueensSimulation
+            path: NQueensSimulation/Library
             key: Library-${{ matrix.targetPlatform }}
             restore-keys: Library-
         - uses: game-ci/unity-builder@v2
           env:
             UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           with:
+            projectPath: NQueensSimulation
             targetPlatform: ${{ matrix.targetPlatform }}
             versioning: Semantic
