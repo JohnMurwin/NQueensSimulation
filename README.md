@@ -22,13 +22,14 @@
 -->
 
 [![License][license-shield]][license-url]
-
 [![CI Status][ci-shield]][ci-url]
+[![Build](https://github.com/JohnMurwin/NQueensSimulation/actions/workflows/Builds.yml/badge.svg)](https://github.com/JohnMurwin/NQueensSimulation/actions/workflows/Builds.yml)
+
 [![Quality Gate Status][quality-gate-shield]][quality-gate-url]
+[![Coverage][coverage-shield]][coverage-url]
 [![Vulnerabilities][vulnerabilities-shield]][vulnerabilities-url]
 [![Bugs][bugs-shield]][bugs-url]
 [![Code Smells][smells-shield]][smells-url]
-[![Coverage][coverage-shield]][coverage-url]
 
 
 
@@ -204,6 +205,8 @@ Project Link: [https://github.com/JohnMurwin/NQueensSimulation](https://github.c
 
 [ci-shield]: https://github.com/MirageNet/Mirage/workflows/CI/badge.svg
 [ci-url]: https://github.com/JohnMurwin/NQueensSimulation/actions/workflows/SonarCloud-LintCheck.yml
+
+[build-shield]: https://github.com/JohnMurwin/NQueensSimulation/actions/workflows/Builds.yml/badge.svg[build-url]: https://github.com/JohnMurwin/NQueensSimulation/actions/workflows/Builds.yml
 
 [license-shield]: https://img.shields.io/github/license/JohnMurwin/NQueensSimulation.svg?=plastic
 [license-url]: https://github.com/JohnMurwin/NQueensSimulation/blob/main/LICENSE.md
