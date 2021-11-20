@@ -2,7 +2,7 @@
 #   Uses: GameCI, 
 #   From: GameCI, and Fathom7
 
-name: Automated Builds
+name: Build
 on:
   release:
     types: [published]
