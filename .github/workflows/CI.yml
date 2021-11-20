@@ -157,23 +157,24 @@ jobs:
           - WebGL # WebGL.
 
     steps:
-			# First we checkout the project with LFS support (don't need fetch depth here)
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
           lfs: true
 
-			# Cache library for future speed for Analysis
       - uses: actions/cache@v2
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
           restore-keys: Library-
 
-			# Then use GameCI to build the project on the Matrix TargetPlatform from above (here we are just testing that each TargetPlatform actually builds as a metric of the CI process, so dont need to upload)
       - uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-					versioning: Semantic
+					
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
