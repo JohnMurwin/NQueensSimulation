@@ -4,3 +4,8 @@ coverage:
       default:
         target: 75%    # the required coverage value
         threshold: 10%  # the leniency in hitting the target
+
+ignore:
+  - "NQueensSimulation/Assets/Plugins"
+  - "NQueensSimulation/Assets/_Demo" 
+  - "NQueensSimulation/Assets/Tests"  
