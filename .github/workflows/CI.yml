@@ -81,7 +81,6 @@ jobs:
 
 
   TestProject:
-    needs: LintProject
     name: Run Tests in ${{ matrix.testMode }}
     runs-on: ubuntu-latest
     strategy:
@@ -140,3 +139,34 @@ jobs:
         with:
           name: Test results for ${{ matrix.testMode }}
           path: ${{ steps.tests.outputs.artifactsPath }}
+
+	BuildProject:
+				name: Build for ${{ matrix.targetPlatform }}
+				runs-on: ubuntu-latest
+				strategy:
+					fail-fast: false
+					matrix:
+						targetPlatform:
+							- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+							- StandaloneWindows64 # Build a Windows 64-bit standalone.
+							- StandaloneLinux64 # Build a Linux 64-bit standalone.
+							- WebGL # WebGL.
+				steps:
+					- name: Checkout Repo
+						uses: actions/checkout@v2
+						with:
+							fetch-depth: 0
+							lfs: true
+					- name: Cache Project Library for next Build
+						uses: actions/cache@v2
+						with:
+							path: NQueensSimulation/Library
+							key: Library-${{ matrix.targetPlatform }}
+							restore-keys: Library-
+					- uses: game-ci/unity-builder@v2
+						env:
+							UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+						with:
+							projectPath: NQueensSimulation
+							targetPlatform: ${{ matrix.targetPlatform }}
+							versioning: Semantic
