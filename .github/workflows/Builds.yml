@@ -1,0 +1,53 @@
+#   Automated Build Pipeline
+#   Uses: GameCI, 
+#   From: GameCI, and Fathom7
+
+name: Automated Builds
+on:
+  release:
+    types: [published]
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  BuildProject:
+      name: Build for ${{ matrix.targetPlatform }}
+      runs-on: ubuntu-latest
+      strategy:
+        fail-fast: false
+        matrix:
+          targetPlatform:
+            - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+            - StandaloneWindows64 # Build a Windows 64-bit standalone.
+            - StandaloneLinux64 # Build a Linux 64-bit standalone.
+            - WebGL # WebGL.
+      steps:
+        # First checkout the repo with both LFS and FetchDepth 0 for full commit
+        - name: Checkout Repo
+          uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+            lfs: true
+
+        # Cache project for future speed
+        - name: Cache Project Library for next Build
+          uses: actions/cache@v2
+          with:
+            path: NQueensSimulation/Library
+            key: Library-${{ matrix.targetPlatform }}
+            restore-keys: Library-
+        
+        # Use GameCI to build project with TargetPlatform Matrix
+        - uses: game-ci/unity-builder@v2
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          with:
+            projectPath: NQueensSimulation
+            targetPlatform: ${{ matrix.targetPlatform }}
+            versioning: Semantic
+
+        # Upload Build Artifacts *for PR's*
+        - uses: actions/upload-artifact@v2
+          with:
+            name: Build-${{ matrix.targetPlatform }}
+            path: build/${{ matrix.targetPlatform }}
