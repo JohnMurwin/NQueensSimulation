@@ -55,6 +55,27 @@ namespace NQueensSimulation
 
         //! All Private methods go here
         #region PrivateMethods
+        private bool FindSolution (Board board, int col)
+        {
+            if (col >= numberOfQueens)  // our base case for when/if all Queens are placed on board
+                return true;
+
+            for (int i = 0; i < numberOfQueens; i++)    // start with current column and place Queen in row after row
+            {
+                if (CheckSafePlace(queensBoard, i, col)) // CheckSafePlace to see if we can place Queen here
+                {
+                    queensBoard.SetPositionValue(1, i, col);    // set space to 1 for successful Queen location
+
+                    if (FindSolution(queensBoard, col + 1) == true) // recursive call to place the rest of the Queens
+                        return true;
+                }    
+
+                queensBoard.SetPositionValue(0, i, col); // else we backtrack and set that spot to 0 and move onto next row [BACKTRACING] 
+            }
+            
+            return false;   //Queen cannot be placed, so we return false
+        }
+
         //* Note: since we are only placing from the left, we only need to check left spots, we assume right spots will always be open
         private bool CheckSafePlace (Board board, int rowLoc, int colLoc)
         {
