@@ -5,6 +5,7 @@ namespace NQueensSimulation
     /// <summary>
     /// The NQueens Algorithm Solver Component
     /// </summary>
+    // ToDo: extract out this class to remove MonoBehaviour dependency
     public class NQueensSolver : MonoBehaviour
     {
         #region Fields

@@ -57,9 +57,28 @@ namespace NQueensSimulation
         }
 
         /// <summary>
+        /// Uses the number of rows to find length
+        /// </summary>
+        /// <returns>int value of row length</returns>
+        public int ReturnRowLength () 
+        {
+            return board.GetLength(0);
+        }
+
+        /// <summary>
+        /// Uses the number of columns to find length
+        /// </summary>
+        /// <returns>int value of column length</returns>
+        public int ReturnColumnLength () 
+        {
+            return board.GetLength(1);            
+        }
+
+        /// <summary>
         /// Prints the board state as a single string using StringBuilder
         /// </summary>
         /// <returns>string value of board</returns>
+        //ToDo: might want to remove this and make it either an extension method, or a static external method
         public string PrintBoard()
         {
             StringBuilder boardOutput = new StringBuilder();    //make string builder
