@@ -12,7 +12,7 @@ namespace NQueensSimulation
 
 
         //* Protected Variables
-        Board queensBoard = new Board();
+        protected Board queensBoard = new Board();
 
         //* Private Variables
         [SerializeField]
