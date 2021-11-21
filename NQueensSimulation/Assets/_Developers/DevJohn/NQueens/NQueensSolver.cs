@@ -65,15 +65,15 @@ namespace NQueensSimulation
 
             for (int i = 0; i < numberOfQueens; i++)    // start with current column and place Queen in row after row
             {
-                if (CheckSafePlace(queensBoard, i, col)) // CheckSafePlace to see if we can place Queen here
+                if (CheckSafePlace(board, i, col)) // CheckSafePlace to see if we can place Queen here
                 {
-                    queensBoard.SetPositionValue(1, i, col);    // set space to 1 for successful Queen location
+                    board.SetPositionValue(1, i, col);    // set space to 1 for successful Queen location
 
-                    if (FindSolution(queensBoard, col + 1)) // recursive call to place the rest of the Queens
+                    if (FindSolution(board, col + 1)) // recursive call to place the rest of the Queens
                         return true;
                 }    
 
-                queensBoard.SetPositionValue(0, i, col); // else we backtrack and set that spot to 0 and move onto next row [BACKTRACING] 
+                board.SetPositionValue(0, i, col); // else we backtrack and set that spot to 0 and move onto next row [BACKTRACING] 
             }
             
             return false;   //Queen cannot be placed, so we return false
