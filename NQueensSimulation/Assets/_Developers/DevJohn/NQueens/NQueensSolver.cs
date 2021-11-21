@@ -48,7 +48,7 @@ namespace NQueensSimulation
         /// <returns>void</returns>
         public void Solve()
         {
-            if (FindSolution(queensBoard, 0) == false)
+            if (FindSolution(queensBoard, 0))
                 Debug.Log("Could not find a solution... Either it doesnt exit, or something went wrong.");
 
             Debug.Log("Solved NQueens board for size: " + numberOfQueens + '\n' + queensBoard.PrintBoard());
@@ -69,7 +69,7 @@ namespace NQueensSimulation
                 {
                     queensBoard.SetPositionValue(1, i, col);    // set space to 1 for successful Queen location
 
-                    if (FindSolution(queensBoard, col + 1) == true) // recursive call to place the rest of the Queens
+                    if (FindSolution(queensBoard, col + 1)) // recursive call to place the rest of the Queens
                         return true;
                 }    
 
