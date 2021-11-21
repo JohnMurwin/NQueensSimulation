@@ -55,6 +55,28 @@ namespace NQueensSimulation
 
         //! All Private methods go here
         #region PrivateMethods
+        //* Note: since we are only placing from the left, we only need to check left spots, we assume right spots will always be open
+        private bool CheckSafePlace (Board board, int rowLoc, int colLoc)
+        {
+            int i, j; // temp row/column values
+
+            // check direct-left of current spot
+            for (i = 0; i < colLoc; i++)
+                if (board.ReturnPositionValue(rowLoc, i) == 1)
+                    return false;
+
+            // check upper-left of current spot
+            for (i = rowLoc, j = colLoc; i >=0 && j >= 0; i--,j--)
+                if (board.ReturnPositionValue(i,j) == 1)
+                    return false;
+
+            // check lower-left of current spot
+            for (i = rowLoc, j = colLoc; j >=0 && i < numberOfQueens; i++, j--)
+                if (board.ReturnPositionValue(i,j) == 1)
+                    return false;
+
+            return true;    //if none of the above checks fired, then its a safe spot to place Queen
+        }
         
 
         #endregion
