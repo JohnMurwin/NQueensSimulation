@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace NQueensSimulation
 {
@@ -31,6 +31,9 @@ namespace NQueensSimulation
 
             queensBoard.ConstructBoard(numberOfQueens);
 
+            Debug.Log("Starting Board: " + '\n' + queensBoard.PrintBoard());
+
+            
             Solve();
         }
 
