@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NQueensSimulation
 {
@@ -48,7 +48,10 @@ namespace NQueensSimulation
         /// <returns>void</returns>
         public void Solve()
         {
-            Debug.Log(queensBoard.PrintBoard());
+            if (FindSolution(queensBoard, 0) == false)
+                Debug.Log("Could not find a solution... Either it doesnt exit, or something went wrong.");
+
+            Debug.Log("Solved NQueens board for size: " + numberOfQueens + '\n' + queensBoard.PrintBoard());
         }
 
         #endregion
