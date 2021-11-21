@@ -1,12 +1,10 @@
-﻿using UnityEngine;
-
+﻿
 namespace NQueensSimulation
 {
     /// <summary>
     /// The NQueens Algorithm Solver Component
     /// </summary>
-    // ToDo: extract out this class to remove MonoBehaviour dependency
-    public class NQueensSolver : MonoBehaviour
+    public class NQueensSolver
     {
         #region Fields
         //* Public Variables
@@ -16,29 +14,11 @@ namespace NQueensSimulation
         protected Board queensBoard = new Board();
 
         //* Private Variables
-        [SerializeField]
-        [Tooltip("Determines the starting number of Queens (and by extension the size of the board)")]
-        private int numberOfQueens = 4;
+        private int numberOfQueens;
 
 
         #endregion
 
-
-        //* Any UNITY methods go here
-        #region LifeCycle
-        private void Start() {
-
-            Debug.Log("Starting number of queens: " + numberOfQueens);
-
-            queensBoard.ConstructBoard(numberOfQueens);
-
-            Debug.Log("Starting Board: " + '\n' + queensBoard.PrintBoard());
-
-            
-            Solve();
-        }
-
-        #endregion
 
         //? ALL Public methods go here
         #region PublicMethods
@@ -47,12 +27,14 @@ namespace NQueensSimulation
         /// Solves the NQueens Algorithm based off the input value: numberOfQueens
         /// </summary>
         /// <returns>void</returns>
-        public void Solve()
+        public bool Solve(Board board, int size)
         {
-            if (FindSolution(queensBoard, 0))
-                Debug.Log("Could not find a solution... Either it doesnt exit, or something went wrong.");
+            numberOfQueens = size;
 
-            Debug.Log("Solved NQueens board for size: " + numberOfQueens + '\n' + queensBoard.PrintBoard());
+            if (!FindSolution(board, 0))
+                return false;
+
+            return true;
         }
 
         #endregion
