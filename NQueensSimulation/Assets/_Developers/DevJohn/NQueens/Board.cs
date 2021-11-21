@@ -1,0 +1,67 @@
+﻿using System.Text;
+
+namespace NQueensSimulation
+{
+    public class Board 
+    {
+        #region Fields
+        //* Public Variables
+
+        //* Protected Variables
+
+        //* Private Variables
+        private int [,] board;
+
+        #endregion
+
+        //? ALL Public methods go here
+        #region PublicMethods
+
+        /// <summary>
+        /// Constructs an empty, square 2D integer array based off size input
+        /// </summary>
+        /// <param name="squareSize">the number of columns and rows this 'board' should have</param>
+        public void ConstructBoard (int squareSize)
+        {
+            board = new int[squareSize, squareSize];
+
+            for (int i = 0; i < squareSize; i++)
+            {
+                for (int j = 0; j < squareSize ; j++)
+                {
+                    board[i,j] = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Prints the board state as a single string using StringBuilder
+        /// </summary>
+        /// <returns>string value of board</returns>
+        public string PrintBoard()
+        {
+            StringBuilder boardOutput = new StringBuilder();    //make string builder
+
+            for (int i = 0; i < board.GetLength(1); i++)
+            {
+                for (int j = 0; j < board.GetLength(0) ; j++)
+                {
+                    boardOutput.Append(board[i, j]);    //store value at point [i,j]
+                    boardOutput.Append(" ");    //give space for formatting
+                }
+
+                boardOutput.AppendLine();   //new line for new row
+            }
+
+            return boardOutput.ToString(); //output
+        }
+
+        #endregion
+
+        //! All Private methods go here
+        #region PrivateMethods
+        
+
+        #endregion
+    }
+}
