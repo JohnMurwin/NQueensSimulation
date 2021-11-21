@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 namespace NQueensSimulation
 {
@@ -32,6 +32,18 @@ namespace NQueensSimulation
                     board[i,j] = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// <summary>
+        /// Sets an integer value at any particular position in the 2D array
+        /// </summary>
+        /// <param name="desiredValue">The value to set in the position the board</param>
+        /// <param name="row">Row # of the desired position</param>
+        /// <param name="col">Column # of the desired position</param>
+        public void SetPositionValue (int desiredValue, int row, int col)
+        {
+            board[row, col] = desiredValue;
         }
 
         /// <summary>
