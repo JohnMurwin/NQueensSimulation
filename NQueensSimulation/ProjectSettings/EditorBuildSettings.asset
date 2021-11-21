@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Demo/Scenes/SampleScene.unity
-    guid: d1c3109bdb54ad54c8a2b2838528e640
+    path: Assets/NQueensSimulation/Scenes/NQueens.unity
+    guid: ce09f704e43edf14f9c0c0de24f5652f
   m_configObjects: {}
