@@ -15,9 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
-          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
-          - StandaloneLinux64 # Build a Linux 64-bit standalone.
 
     steps:
       # First checkout the repo with both LFS and FetchDepth 0 for full commit
@@ -39,7 +37,7 @@ jobs:
       - name: Version Assignmnet
         id: versionOutput
         run: |
-          input_file="version.txt
+          input_file="version.txt"
           while read line
           do
             file_text=$line
