@@ -54,7 +54,7 @@ jobs:
         run: |
           $DOTNET_ROOT/dotnet tool install dotnet-sonarscanner --tool-path . --version 5.2.0
           apt update
-          apt install default-jre
+          apt install -y openjdk-11-jre-headless
 
       # Builds dontnet solution of project for SonarCloud analysis
       - name: Generate Solution
