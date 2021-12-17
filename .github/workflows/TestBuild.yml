@@ -39,6 +39,10 @@ jobs:
         run: |
           read -r firstline < ".github/version.txt"
           echo ::set-output name=semVer::$firstline
+          
+      - name: Output SemVer Check
+        run: |
+          echo ${{ steps.versionOutput.outputs.semVer }}
       
       # Use GameCI to build project with TargetPlatform Matrix
       - uses: game-ci/unity-builder@v2
