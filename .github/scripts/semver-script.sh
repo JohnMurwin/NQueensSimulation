@@ -82,7 +82,7 @@ sed -i "s/\(RELEASE_VERSION=\).*\$/\1${RELEASE_VERSION}/" $VERSION_FILE
 # sed -i "s/\(projectVersion=\).*\$/\1${NEW_VERSION}/" $SONAR_FILE
 
 # 9. Update Unity ProjectSettings bundleVersion: number
-sed -i "s/\(bundleVersion:\).*\$/\1${NEW_VERSION}/" $UNITY_FILE
+sed -i "s/\(bundleVersion:\).*\$/\1 ${NEW_VERSION}/" $UNITY_FILE
 
 # 10. Push changes to version file to github for future runs
 git add "$VERSION_FILE"
