@@ -37,7 +37,7 @@ jobs:
       - name: Version Assignmnet
         id: versionOutput
         run: |
-          input_file="version.txt"
+          input_file=".github/version.txt"
           while read line
           do
             file_text=$line
