@@ -86,6 +86,7 @@ sed -i "s/\(bundleVersion:\).*\$/\1${NEW_VERSION}/" $UNITY_FILE
 
 # 10. Push changes to version file to github for future runs
 git add "$VERSION_FILE"
+git add "$UNITY_FILE"
 git commit -m "[ci skip] Automated Commit: CI Build Number Increment v$CURRENT_VERSION -> v$NEW_VERSION"
 git push origin dev --force
 
