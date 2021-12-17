@@ -38,10 +38,10 @@ jobs:
               
         # Read from file and assign to outputs object
         - name: Version Assignmnet
-        id: versionOutput
-        run: |
-          read -r firstline < ".github/version.txt"
-          echo ::set-output name=semVer::$firstline
+          id: versionOutput
+          run: |
+            read -r firstline < ".github/version.txt"
+            echo ::set-output name=semVer::$firstline
         
         # Use GameCI to build project with TargetPlatform Matrix
         - uses: game-ci/unity-builder@v2

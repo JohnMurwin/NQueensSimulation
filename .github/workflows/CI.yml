@@ -80,7 +80,6 @@ jobs:
 
 
   TestProject:
-    needs: LintProject
     name: Run Tests in ${{ matrix.testMode }}
     runs-on: ubuntu-latest
     strategy:
@@ -140,7 +139,6 @@ jobs:
           name: Test results for ${{ matrix.testMode }}
           path: ${{ steps.tests.outputs.artifactsPath }}
   BuildProject:
-    needs: TestProject
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
