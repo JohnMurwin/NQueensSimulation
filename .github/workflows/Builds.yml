@@ -4,10 +4,8 @@
 
 name: Build
 on:
-  release:
-    types: [published]
-  pull_request:
-    types: [opened, synchronize, reopened, edited]
+  push:
+    branches: [main, dev]
 
 jobs:
   BuildProject:
@@ -21,6 +19,7 @@ jobs:
             - StandaloneWindows64 # Build a Windows 64-bit standalone.
             - StandaloneLinux64 # Build a Linux 64-bit standalone.
             - WebGL # WebGL.
+
       steps:
         # First checkout the repo with both LFS and FetchDepth 0 for full commit
         - name: Checkout Repo
@@ -36,6 +35,13 @@ jobs:
             path: NQueensSimulation/Library
             key: Library-${{ matrix.targetPlatform }}
             restore-keys: Library-
+              
+        # Read from file and assign to outputs object
+        - name: Version Assignmnet
+          id: versionOutput
+          run: |
+            read -r firstline < ".github/version.txt"
+            echo ::set-output name=semVer::$firstline
         
         # Use GameCI to build project with TargetPlatform Matrix
         - uses: game-ci/unity-builder@v2
@@ -44,7 +50,8 @@ jobs:
           with:
             projectPath: NQueensSimulation
             targetPlatform: ${{ matrix.targetPlatform }}
-            versioning: Semantic
+            versioning: Custom
+            version: ${{ steps.versionOutput.outputs.semVer }}
 
         # Upload Build Artifacts *for PR's*
         - uses: actions/upload-artifact@v2
