@@ -10,6 +10,7 @@
 # REQUIRED files to use to update version information
 VERSION_FILE="./.github/version.txt"
 SONAR_FILE=""
+UNITY_FILE="./NQueensSimulation/ProjectSettings/ProjectSettings.asset"
 
 # 0. Check for if the branch name even exists
 if [ "$GITHUB_REF_NAME" == "" ]; then
@@ -70,17 +71,20 @@ fi
 git checkout dev
 git pull
 
-# 6. Update version.txt file
+# 6. Set new version for dev update
+NEW_VERSION="$BREAKING_VERSION.$RELEASE_VERSION.$FEATURE_VERSION"
+
+# 7. Update version.txt file
 sed -i "s/\(FEATURE_VERSION=\).*\$/\1${FEATURE_VERSION}/" $VERSION_FILE
 sed -i "s/\(RELEASE_VERSION=\).*\$/\1${RELEASE_VERSION}/" $VERSION_FILE
 
-# 7. Update sonar-project.properties file
+# 8. Update sonar-project.properties file
 # sed -i "s/\(projectVersion=\).*\$/\1${NEW_VERSION}/" $SONAR_FILE
 
-# 8. Set new version for dev update
-NEW_VERSION="$BREAKING_VERSION.$RELEASE_VERSION.$FEATURE_VERSION"
+# 9. Update Unity ProjectSettings bundleVersion: number
+set -i "s/\(bundleVersion:\).*\$/\1${NEW_VERSION}/" $UNITY_FILE
 
-# 9. Push changes to version file to github for future runs
+# 10. Push changes to version file to github for future runs
 git add "$VERSION_FILE"
 git commit -m "[ci skip] Automated Commit: CI Build Number Increment v$CURRENT_VERSION -> v$NEW_VERSION"
 git push origin dev --force
