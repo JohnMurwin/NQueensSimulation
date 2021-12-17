@@ -150,7 +150,7 @@ jobs:
           - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
           - StandaloneLinux64 # Build a Linux 64-bit standalone.
-
+          
     steps:
       # First checkout the repo with both LFS and FetchDepth 0 for full commit
       - name: Checkout Repo
@@ -169,10 +169,10 @@ jobs:
       
       # Read from file and assign to outputs object
       - name: Version Assignmnet
-      id: versionOutput
-      run: |
-        read -r firstline < ".github/version.txt"
-        echo ::set-output name=semVer::$firstline
+        id: versionOutput
+        run: |
+          read -r firstline < ".github/version.txt"
+          echo ::set-output name=semVer::$firstline
         
       # Use GameCI to build project with TargetPlatform Matrix
       - uses: game-ci/unity-builder@v2
