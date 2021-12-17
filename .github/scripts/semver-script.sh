@@ -77,7 +77,7 @@ NEW_VERSION="$BREAKING_VERSION.$RELEASE_VERSION.$FEATURE_VERSION"
 # 7. Update version.txt file
 sed -i "s/\(FEATURE_VERSION=\).*\$/\1${FEATURE_VERSION}/" $VERSION_FILE
 sed -i "s/\(RELEASE_VERSION=\).*\$/\1${RELEASE_VERSION}/" $VERSION_FILE
-sed -i -e "1${NEW_VERSION}" $VERSION_FILE
+sed -i "1s/^/${NEW_VERSION} \n/" $VERSION_FILE
 
 # 8. Update sonar-project.properties file
 # sed -i "s/\(projectVersion=\).*\$/\1${NEW_VERSION}/" $SONAR_FILE
